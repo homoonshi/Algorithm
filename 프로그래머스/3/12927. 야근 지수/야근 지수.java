@@ -6,11 +6,10 @@ class Solution {
         long result = 0;
         
         Arrays.sort(works);
-        int size = works.length;
-        int max = works[size-1];
+        int max = works[works.length-1];
         int[] work = new int[max+1];
         
-        for(int i=size-1; i>=0; i--){
+        for(int i=works.length-1; i>=0; i--){
             work[works[i]]++;
         }
         
@@ -18,10 +17,6 @@ class Solution {
             
             if(n==0){
                 result += Math.pow(i, 2) * work[i];
-                size -= work[i];
-                if(size==0){
-                    break;
-                }
                 continue;
             }
             
@@ -31,7 +26,6 @@ class Solution {
                     work[i-1]+=n;
                 }
                 result += Math.pow(i, 2) * work[i];
-                size -= n;
                 n=0;
                 continue;
             }
