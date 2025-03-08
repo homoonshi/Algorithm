@@ -35,7 +35,9 @@ public class Main {
                 dp[n][time] = Math.max(dp[n][time], dp[n-1][time]);
                 if(time-K[n]>=0){
                     dp[n][time-K[n]] = Math.max(dp[n][time-K[n]], dp[n-1][time] + S[n]);
-                    newTime.add(time-K[n]);
+                    if(!times.contains(time-K[n])) {
+                        newTime.add(time - K[n]);
+                    }
                 }
             }
             for (Integer time : newTime) {
