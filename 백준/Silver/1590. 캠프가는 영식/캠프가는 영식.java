@@ -31,14 +31,31 @@ public class Main {
         Collections.sort(bus);
         int result = -1;
 
-        for(Integer time : bus){
-            if(T < time){
-                result = time - T;
-                break;
-            }else if(T==time){
-                result = 0;
-                break;
+        int start = 0;
+        int end = bus.size()-1;
+
+        while(start<=end){
+
+            int mid = (start+end) / 2;
+            int time = bus.get(mid);
+
+            if(T <= time){
+                end = mid - 1;
+            }else{
+                start = mid + 1;
             }
+
+        }
+
+        if(start==bus.size()){
+            start--;
+        }
+        int time = bus.get(start);
+
+        if(T < time){
+            result = time - T;
+        }else if(T==time){
+            result = 0;
         }
 
         bw.write(result+"");
