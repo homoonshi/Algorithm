@@ -2,52 +2,58 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static String str1;
-    static String str2;
-    static int[][] dp;
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
 
-        str1 = br.readLine();
-        str2 = br.readLine();
+        String a = br.readLine();
+        String b = br.readLine();
 
-        dp = new int[str1.length() + 1][str2.length() + 1];
+        int[][] dp = new int[a.length()+1][b.length()+1];
 
-        for (int i = 1; i <= str1.length(); i++) {
-            for (int j = 1; j <= str2.length(); j++) {
-                if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+        for(int i=1; i<=a.length(); i++){
+            for(int j=1; j<=b.length(); j++){
+                if(a.charAt(i-1)==b.charAt(j-1)){
                     dp[i][j] = dp[i-1][j-1] + 1;
-                } else {
-                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
-                }
-            }
-        }
-
-        int len = dp[str1.length()][str2.length()];
-        bw.write(len+"\n");
-
-        StringBuilder res = new StringBuilder("");
-
-        if(len>0){
-            int i = str1.length();
-            int j = str2.length();
-            while( i > 0 && j > 0 ){
-                if(str1.charAt(i-1)==str2.charAt(j-1)){
-                    res.append(str1.charAt(i-1));
-                    i--;
-                    j--;
                 }else{
-                    if(dp[i-1][j]>=dp[i][j-1]){
-                        i--;
-                    }else{
-                        j--;
-                    }
+                    dp[i][j] = Math.max(dp[i-1][j], dp[i][j-1]);
                 }
             }
-            bw.write(res.reverse().toString());
         }
+
+        Deque<Character> res = new ArrayDeque<>();
+
+        int c = a.length();
+        int r = b.length();
+
+        while(true){
+
+            if(dp[c][r]==0){
+                break;
+            }
+
+            if((dp[c-1][r]==dp[c][r-1])&&(dp[c-1][r]<dp[c][r])){
+                res.addFirst(a.charAt(c-1));
+                c = c-1;
+                r = r-1;
+            }else{
+                if(dp[c-1][r]>dp[c][r-1]){
+                    c--;
+                }else{
+                    r--;
+                }
+            }
+
+        }
+
+        bw.write(dp[a.length()][b.length()]+"\n");
+
+        while(!res.isEmpty()){
+            bw.write(res.pollFirst());
+        }
+
         bw.flush();
+
     }
 }
