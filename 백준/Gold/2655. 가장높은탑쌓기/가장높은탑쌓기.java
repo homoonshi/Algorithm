@@ -75,7 +75,7 @@ public class Main {
     public static void recursion(int c, int h, int w){
 
         if(c==N){
-            if(height <= h){
+            if(height < h){
                 res = new ArrayDeque<>();
                 int size = lists.size();
                 for(int i=0; i<size; i++){
@@ -86,7 +86,7 @@ public class Main {
             return;
         }
 
-        if(height > h + remain[c]) return;
+        if(height >= h + remain[c]) return;
 
         if(brick[c].weight<w) {
             lists.add(brick[c].index);
