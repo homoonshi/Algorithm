@@ -3,10 +3,6 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-
-    static int N, K;
-    static int time;
-
     public static void main(String[] args) throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -14,69 +10,70 @@ public class Main {
 
         String[] input = br.readLine().split(" ");
 
-        N = Integer.parseInt(input[0]);
-        K = Integer.parseInt(input[1]);
-        time = 0;
-        int result = 0;
+        int N = Integer.parseInt(input[0]);
+        int K = Integer.parseInt(input[1]);
 
-        if(N!=K) {
-            result = bfs();
-        }else{
-            result = 1;
-        }
+        int[] visit = new int[100001];
+        int[] count = new int[100001];
 
-        bw.write(time+"\n");
-        bw.write(result+"");
-        bw.flush();
+        Arrays.fill(visit, Integer.MAX_VALUE);
 
-    }
-
-    public static int bfs(){
-
-        int[] go = {1,-1,2};
         Deque<int[]> deque = new ArrayDeque<>();
-        deque.addLast(new int[]{N, 0});
+        deque.add(new int[]{N, 0});
 
-        int[] visited = new int[100001];
-
-        int count = 0;
-        int[] temp;
-        int num = 0;
+        if(N==K){
+            bw.write(0+"\n");
+            bw.write(1+"");
+            bw.flush();
+            return;
+        }
 
         while(!deque.isEmpty()){
 
-            temp = deque.pollFirst();
-            int t = temp[1] + 1;
+            int[] temp = deque.pollFirst();
 
-            for(int i=0; i<3; i++){
+            int posi = temp[0];
+            int sec = temp[1];
 
-                if(i!=2){
-                    num = temp[0] + go[i];
+            if(visit[posi] < sec){
+                continue;
+            }
+
+            if(posi+1<=100000 && visit[posi+1] >= sec+1){
+                    deque.addLast(new int[]{posi+1, sec+1});
+                    visit[posi+1] = sec+1;
+                if(visit[posi+1]!=sec+1) {
+                    count[posi+1] = 1;
                 }else{
-                    num = temp[0] * go[i];
+                    count[posi+1]++;
                 }
+            }
 
-                if( time != 0 && time < t ){
-                    break;
+            if(posi-1>=0 && visit[posi-1] >= sec+1){
+                    deque.addLast(new int[]{posi - 1, sec + 1});
+                    visit[posi - 1] = sec + 1;
+                if(visit[posi-1]!=sec+1) {
+                    count[posi-1] = 1;
+                }else{
+                    count[posi-1]++;
                 }
+            }
 
-                if(num == K){
-                    count++;
-                    time = t;
+            if(posi*2<=100000 && visit[posi*2] >= sec+1){
+                    deque.addLast(new int[]{posi * 2, sec + 1});
+                    visit[posi*2] = sec + 1;
+                if(visit[posi*2]!=sec+1) {
+                    count[posi*2] = 1;
+                }else{
+                    count[posi*2]++;
                 }
-
-                if(num<0 || num > 100000 || (visited[num]!=0&&visited[num]<t)){
-                    continue;
-                }
-
-                visited[num] = t;
-                deque.addLast(new int[] {num, t});
-
             }
 
         }
 
-        return count;
-    }
+        bw.write(visit[K]+"\n");
+        bw.write(count[K]+"");
+        bw.flush();
 
+    }
 }
