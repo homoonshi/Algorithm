@@ -1,0 +1,11 @@
+SELECT h.hour AS HOUR, 
+    (SELECT COUNT(*)
+        FROM ANIMAL_OUTS O
+     WHERE  TO_CHAR(O.DATETIME, 'HH24') = TO_CHAR(h.hour, 'FM00')
+        )AS COUNT
+FROM (
+    SELECT LEVEL - 1 AS hour
+    FROM dual
+    CONNECT BY LEVEL <= 24
+) h
+ORDER BY HOUR ASC
