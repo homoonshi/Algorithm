@@ -1,9 +1,7 @@
-
 import java.io.*;
 import java.util.*;
 
 public class Main {
-
     public static void main(String[] args) throws IOException{
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -11,32 +9,27 @@ public class Main {
 
         int N = Integer.parseInt(br.readLine());
         String[] input;
+        long[] dp = new long[N+1];
+        long res = 0;
 
-        long[] totalCost = new long[N+2];
-        int[][] schedule = new int[N+1][2];
-
-        for(int i=1; i<=N; i++){
-
+        for(int i=0; i<N; i++){
             input = br.readLine().split(" ");
 
-            schedule[i][0] = Integer.parseInt(input[0]);
-            schedule[i][1] = Integer.parseInt(input[1]);
+            int T = Integer.parseInt(input[0]);
+            int P = Integer.parseInt(input[1]);
 
-            totalCost[i] = Math.max(totalCost[i], totalCost[i-1]);
-            int completeDay = i + schedule[i][0];
-
-            if(completeDay <= N+1){
-                long cost = schedule[i][1] + totalCost[i];
-                totalCost[completeDay] = Math.max(totalCost[completeDay], cost);
+            if(i > 0 && dp[i] < dp[i-1]){
+                dp[i] = dp[i-1];
             }
 
+            if(i+T <= N) {
+                dp[i + T] = Math.max(dp[i + T], dp[i] + P);
+                res = Math.max(res, dp[i+T]);
+            }
         }
 
-        long result = Math.max(totalCost[N], totalCost[N+1]);
-
-        bw.write(result+"");
+        bw.write(res+"");
         bw.flush();
 
     }
-
 }
