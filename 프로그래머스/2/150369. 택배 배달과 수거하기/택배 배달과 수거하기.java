@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 class Solution {
+    
     public long solution(int cap, int n, int[] deliveries, int[] pickups) {
         long answer = 0;
         
@@ -34,43 +35,36 @@ class Solution {
             int nextD = 0;
             int nextP = 0;
             
-            while(!delivery.isEmpty()){
-                int[] d = delivery.pollLast();
-                distance = Math.max(distance, d[0]);
-                if(nextD == 0){
-                    d[1] -= cap;
-                }else{
-                    d[1] += nextD;
-                }
-                if(d[1]>=0){
-                    if(d[1]>0){
-                        delivery.addLast(d);
-                    }
-                    break;
-                }
-                nextD = d[1];
-            }
-            
-            while(!pickup.isEmpty()){
-                int[] p = pickup.pollLast();
-                distance = Math.max(distance, p[0]);
-                if(nextP == 0){
-                    p[1] -= cap;
-                }else{
-                    p[1] += nextP;
-                }
-                if(p[1]>=0){
-                    if(p[1]>0){
-                        pickup.addLast(p);
-                    }
-                    break;
-                }
-                nextP = p[1];
-            }
+            distance = deliver(delivery, distance, cap);
+            distance =deliver(pickup, distance, cap);
             
             answer += (distance*2);
         }
         
         return answer;
+    }
+    
+    private int deliver(Deque<int[]> map, int distance, int cap){
+        
+        int next = 0;
+        
+        while(!map.isEmpty()){
+                int[] temp = map.pollLast();
+                distance = Math.max(distance, temp[0]);
+                if(next == 0){
+                    temp[1] -= cap;
+                }else{
+                    temp[1] += next;
+                }
+                if(temp[1]>=0){
+                    if(temp[1]>0){
+                        map.addLast(temp);
+                    }
+                    break;
+                }
+                next = temp[1];
+        }
+        
+        return distance;
     }
 }
