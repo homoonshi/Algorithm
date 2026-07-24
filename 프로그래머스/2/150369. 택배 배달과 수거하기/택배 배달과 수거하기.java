@@ -9,45 +9,32 @@ class Solution {
         Deque<int[]> delivery = new ArrayDeque<>();
         Deque<int[]> pickup = new ArrayDeque<>();
         
-        int totalD = 0;
-        int totalP = 0;
-        
         for(int i=1; i<=n; i++){
-            
-            if(deliveries[i-1] != 0){
-                int[] d = new int[2];
-                d[0] = i; 
-                d[1] = deliveries[i-1];
-                delivery.addLast(d);
-            }
-            
-            if(pickups[i-1] != 0){
-                int[] p = new int[2];
-                p[0] = i;
-                p[1] = pickups[i-1];
-                pickup.addLast(p);
-            }
+            setMap(delivery, deliveries[i-1], i);
+            setMap(pickup, pickups[i-1], i);
         }
         
         while(!delivery.isEmpty() || !pickup.isEmpty()){
-            
-            int distance = 0;
-            int nextD = 0;
-            int nextP = 0;
-            
+            int distance = 0;            
             distance = deliver(delivery, distance, cap);
-            distance =deliver(pickup, distance, cap);
-            
+            distance = deliver(pickup, distance, cap);
             answer += (distance*2);
         }
         
         return answer;
     }
     
+    private void setMap(Deque<int[]> map,int count,int index){
+        if(count != 0){
+            int[] temp = new int[2];
+            temp[0] = index; 
+            temp[1] = count;
+            map.addLast(temp);
+        }
+    }
+    
     private int deliver(Deque<int[]> map, int distance, int cap){
-        
         int next = 0;
-        
         while(!map.isEmpty()){
                 int[] temp = map.pollLast();
                 distance = Math.max(distance, temp[0]);
@@ -64,7 +51,7 @@ class Solution {
                 }
                 next = temp[1];
         }
-        
         return distance;
     }
+    
 }
